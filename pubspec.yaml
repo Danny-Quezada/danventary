@@ -21,6 +21,8 @@ dependencies:
   card_swiper: ^3.0.1
   syncfusion_flutter_charts: ^23.2.6
   intl: ^0.18.1
+  flutter_provider_utilities: ^1.0.6
+  input_quantity: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -55,7 +57,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Inter-Regular.ttf
         - asset: assets/fonts/Inter-ExtraBold.ttf
-          weigth: 900
+          weight: 900
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
