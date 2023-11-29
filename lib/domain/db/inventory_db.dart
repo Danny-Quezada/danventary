@@ -22,7 +22,7 @@ class InventoryDB {
         db.execute(
             "CREATE TABLE Category(categoryId INTEGER PRIMARY KEY, categoryName TEXT)");
         db.execute(
-            "CREATE TABLE Product(productId INTEGER PRIMARY KEY, quantity INTEGER,productName TEXT, description TEXT, price REAL, salePrice REAL, categoryId INTEGER, FOREIGN KEY(categoryId) REFERENCES Category(idCategory))");
+            "CREATE TABLE Product(productId INTEGER PRIMARY KEY, quantity INTEGER,productName TEXT, Status INTEGER,description TEXT, price REAL, salePrice REAL, categoryId INTEGER, FOREIGN KEY(categoryId) REFERENCES Category(idCategory))");
         db.execute(
             "Create TABLE ProductImage(productImageId INTEGER PRIMARY KEY,productId INTEGER, urlImage TEXT, FOREIGN KEY(productId) REFERENCES Product(idProduct))");
       },

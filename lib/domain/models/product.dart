@@ -11,8 +11,10 @@ class Product {
   double price;
   double salePrice;
   List<ProductImage>? productImages;
+  int status=0;
   Product(this.productId, this.productImages,
-      {required this.productName,
+      {status = true,
+      required this.productName,
       required this.description,
       required this.price,
       required this.salePrice,
@@ -20,6 +22,7 @@ class Product {
       required this.quantity});
   Map<String, dynamic> toMap() {
     return {
+      "Status": status,
       "productId": productId ?? 0,
       "productName": productName,
       "description": description,
@@ -31,7 +34,12 @@ class Product {
   }
 
   static Product toObject(Map<dynamic, dynamic> objectMap) {
-    return Product(objectMap["productId"], [],
+
+    return Product(
+      
+      objectMap["productId"], [],
+      status: objectMap["Status"],
+      
         productName: objectMap["productName"],
         description: objectMap["description"],
         price: objectMap["price"],
