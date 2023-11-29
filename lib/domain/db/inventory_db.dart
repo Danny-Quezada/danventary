@@ -20,7 +20,7 @@ class InventoryDB {
       join(await getDatabasesPath(), "inventory_database.db"),
       onCreate: (db, version) {
         db.execute(
-            "CREATE TABLE Category(categoryId INTEGER PRIMARY KEY, categoryName TEXT)");
+            "CREATE TABLE Category(categoryId INTEGER PRIMARY KEY, categoryName TEXT, Status INTEGER)");
         db.execute(
             "CREATE TABLE Product(productId INTEGER PRIMARY KEY, quantity INTEGER,productName TEXT, Status INTEGER,description TEXT, price REAL, salePrice REAL, categoryId INTEGER, FOREIGN KEY(categoryId) REFERENCES Category(idCategory))");
         db.execute(

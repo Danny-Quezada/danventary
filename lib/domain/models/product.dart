@@ -1,4 +1,4 @@
-import 'package:inventory_control/domain/models/category.dart';
+import 'package:inventory_control/domain/models/product_category.dart';
 
 import 'product_image.dart';
 
@@ -7,7 +7,7 @@ class Product {
   int quantity;
   String productName;
   String description;
-  Category? category;
+  ProductCategory? category;
   double price;
   double salePrice;
   List<ProductImage>? productImages;

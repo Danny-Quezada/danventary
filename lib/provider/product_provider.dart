@@ -39,8 +39,8 @@ class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
   Future<void> delete(Product T, int index) async {
     try {
       String productName = await iProductModel.delete(T);
-      T.status=0;
-      products[index]=T;
+      T.status = 0;
+      products[index] = T;
       notifyListeners();
       notifyInfo("Producto: $productName ha sido dado de baja");
     } catch (e) {
@@ -48,16 +48,14 @@ class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
     }
   }
 
-  Future<void> update(Product T, int index)async{
+  Future<void> update(Product T, int index) async {
     try {
       String productName = await iProductModel.update(T);
-      products[index]=T;
+      products[index] = T;
       notifyListeners();
       notifyInfo("Producto: $productName ha sido actualizado");
     } catch (e) {
       notifyError(e);
     }
-
-    catch(e){}
   }
 }
