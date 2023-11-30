@@ -13,4 +13,5 @@ class Style{
   static Color purchaseColor=CupertinoColors.systemBlue;
   static Color greyColor= CupertinoColors.systemGrey;
 
+  static Color categoryColor=CupertinoColors.systemMint;
 }

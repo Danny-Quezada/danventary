@@ -1,23 +1,53 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_control/domain/models/product.dart';
+import 'package:inventory_control/domain/models/product_category.dart';
+import 'package:inventory_control/provider/category_provider.dart';
 import 'package:inventory_control/provider/product_provider.dart';
+import 'package:inventory_control/ui/pages/category_page.dart';
 import 'package:inventory_control/ui/pages/create_product_page.dart';
 import 'package:inventory_control/ui/styles/styles.dart';
 import 'package:inventory_control/ui/widgets/card_widget.dart';
+import 'package:inventory_control/ui/widgets/search_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
 class ProductPage extends StatelessWidget {
+  TextEditingController searchController = TextEditingController();
   ProductPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+  
     final productProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                
+          PersistentNavBarNavigator.pushNewScreen(
+            context,
+            screen: CategoryPage(),
+            withNavBar: false,
+            pageTransitionAnimation: PageTransitionAnimation.fade,
+          );
+          productProvider.imagesProducts = [];
+              }, icon: const Icon(Icons.category_outlined))
+        ],
+        title: searchBar(
+            function: (value) {},
+            controller: searchController,
+            height: 35,
+            padding: 0,
+            iconColor: const Color(0xffABA5A5),
+            backgroundColor: const Color(0xFFf2f2f2)),
+      ),
       floatingActionButton: FloatingActionButton(
         heroTag: "FABProduct",
         onPressed: () async {
+
+         
           PersistentNavBarNavigator.pushNewScreen(
             context,
             screen: CreateProductPage(),
@@ -30,7 +60,7 @@ class ProductPage extends StatelessWidget {
         child: const Icon(CupertinoIcons.add),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: FutureBuilder(
           future: productProvider.read(),
           builder: (context, snapshot) {
@@ -47,6 +77,7 @@ class ProductPage extends StatelessWidget {
                   );
                 }
                 return ListView.builder(
+                  shrinkWrap: true,
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     CardWidget cardWidget =
@@ -70,6 +101,11 @@ class ProductPage extends StatelessWidget {
   }
 
   CardWidget createProductWidget(BuildContext context, Product product) {
+    final productProvider=Provider.of<ProductProvider>(context,listen: false);
+    List<String> images=[];
+    product.productImages!.forEach((element) {
+      images.add(element.urlImage ?? "");
+     });
     CardWidget cardWidget = CardWidget(
         function: () {
           PersistentNavBarNavigator.pushNewScreen(

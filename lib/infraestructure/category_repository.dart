@@ -5,6 +5,9 @@ import 'package:inventory_control/domain/models/product_category.dart';
 import 'package:sqflite/sql.dart';
 
 class CategoryRepository implements ICategoryModel{
+
+
+  
    @override
   Future<int> create(ProductCategory t) async {
     var db = await InventoryDB.instace.database;

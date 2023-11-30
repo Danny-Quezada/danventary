@@ -28,6 +28,8 @@ class CreateProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider=Provider.of<ProductProvider>(context,listen: false);
+    fillControllers();
     final size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
@@ -41,7 +43,7 @@ class CreateProductPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ProductImage(),
+            const ProductImage(),
             const SizedBox(
               height: 10,
             ),
@@ -113,6 +115,7 @@ class CreateProductPage extends StatelessWidget {
               height: 10,
             ),
             InputQty.int(
+            
               initVal: product?.price ?? 1,
               minVal: 1,
               decoration:
@@ -127,10 +130,10 @@ class CreateProductPage extends StatelessWidget {
             ButtonWidget(
                 text: "Guardar producto",
                 size: Size(size.width, 50),
-                color: Colors.blue,
+                color: Style.productColor,
                 rounded: 12,
                 function: () {
-                  
+                  //productProvider.createProduct();
                 },
                 fontSize: 11)
           ],
@@ -138,10 +141,16 @@ class CreateProductPage extends StatelessWidget {
       ),
     ));
   }
+   fillControllers() {
+    descriptionController.text = product?.description ?? "";
+    nameController.text = product?.productName ?? "";
+  
+
+  }
 }
 
 class ProductImage extends StatelessWidget {
-  ProductImage({super.key});
+  const ProductImage({super.key});
 
   @override
   Widget build(BuildContext context) {

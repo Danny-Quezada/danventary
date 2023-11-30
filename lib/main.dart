@@ -34,7 +34,7 @@ void main(List<String> args) {
         "/": (context) => PrincipalPage(),
         "ProductPage": (context) => ProductPage()
       },
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       darkTheme: ThemeData.dark(
         useMaterial3: true,
       ),

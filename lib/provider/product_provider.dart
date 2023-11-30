@@ -9,7 +9,7 @@ import 'package:inventory_control/domain/models/product_category.dart';
 
 class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
   List<String> imagesProducts = [];
-  List<Product> products = [];
+  List<Product>? products;
   IProductModel iProductModel;
 
   ProductProvider({required this.iProductModel});
@@ -23,7 +23,7 @@ class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
     try {
       int productId = await iProductModel.create(T);
       T.productId = productId;
-      products.add(T);
+      products?.add(T);
       notifyInfo("Producto: ${T.productName} ha sido guardado correctamente.");
       notifyListeners();
     } catch (e) {
@@ -31,9 +31,9 @@ class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
     }
   }
 
-  Future<List<Product>> read() async {
+  Future<List<Product>?> read() async {
     try {
-      if (products.isEmpty) {
+      if (products ==null) {
         products = await iProductModel.read();
         notifyListeners();
       }
@@ -49,8 +49,8 @@ class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
       String productName = await iProductModel.delete(T);
       T.status = 0;
       int index =
-          products.indexWhere((element) => element.productId == T.productId);
-      products[index] = T;
+          products!.indexWhere((element) => element.productId == T.productId);
+      products![index] = T;
 
       notifyListeners();
       notifyInfo("Producto: $productName ha sido dado de baja");
@@ -62,8 +62,8 @@ class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
   Future<void> update(Product T) async {
     try {
       String productName = await iProductModel.update(T);
-      int index=products.indexWhere((element) => element.productId==T.productId);
-      products[index] = T;
+      int index=products!.indexWhere((element) => element.productId==T.productId);
+      products![index] = T;
       notifyListeners();
       notifyInfo("Producto: $productName ha sido actualizado");
     } catch (e) {

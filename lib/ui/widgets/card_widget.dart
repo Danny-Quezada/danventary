@@ -33,10 +33,13 @@ class CardWidget extends StatelessWidget {
               : null,
           trailing: quantity != null
               ? CircleAvatar(
+foregroundColor: Colors.white,
+backgroundColor: Style.productColor,
                   radius: 12,
                   child: Text(
                     quantity!.toString(),
-                    style: Style.h1Style,
+                    style: Style.h1Style
+                    
                   ),
                 )
               : null,
