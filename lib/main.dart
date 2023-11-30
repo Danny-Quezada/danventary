@@ -31,18 +31,25 @@ void main(List<String> args) {
     child: MaterialApp(
       initialRoute: "/",
       routes: {
-        "/":(context) => PrincipalPage(),
-        "ProductPage":(context)=> ProductPage()
+        "/": (context) => PrincipalPage(),
+        "ProductPage": (context) => ProductPage()
       },
       themeMode: ThemeMode.light,
       darkTheme: ThemeData.dark(
         useMaterial3: true,
       ),
       theme: ThemeData(
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(elevation: 0),
+        canvasColor: Colors.white,
+        scaffoldBackgroundColor: Colors.white,
+          floatingActionButtonTheme:
+              const FloatingActionButtonThemeData(elevation: 0),
           fontFamily: "Inter",
           appBarTheme: const AppBarTheme(
-              elevation: 0, centerTitle: true, backgroundColor: Colors.white)),
+            foregroundColor: Colors.black,
+            elevation: 0,
+            centerTitle: true,
+            backgroundColor: Colors.white
+          )),
     ),
   ));
 }

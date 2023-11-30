@@ -1,6 +1,7 @@
 import 'package:inventory_control/domain/db/inventory_db.dart';
 import 'package:inventory_control/domain/interfaces/iproduct_model.dart';
 import 'package:inventory_control/domain/models/product.dart';
+import 'package:inventory_control/domain/models/product_category.dart';
 import 'package:inventory_control/domain/models/product_image.dart';
 
 class ProductRepository implements IProductModel {
@@ -36,10 +37,13 @@ class ProductRepository implements IProductModel {
     } catch (e) {
       throw Exception(e);
     }
+    
   }
 
   @override
   Future<List<Product>> read() async {
+
+    
     List<Product> products = [];
     var db = await InventoryDB.instace.database;
     try {

@@ -22,8 +22,7 @@ class Product {
       required this.quantity});
   Map<String, dynamic> toMap() {
     return {
-      "Status": status,
-      "productId": productId ?? 0,
+      "status": status,
       "productName": productName,
       "description": description,
       "price": price,
@@ -38,8 +37,7 @@ class Product {
     return Product(
       
       objectMap["productId"], [],
-      status: objectMap["Status"],
-      
+      status: objectMap["status"],
         productName: objectMap["productName"],
         description: objectMap["description"],
         price: objectMap["price"],

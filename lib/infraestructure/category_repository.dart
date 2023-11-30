@@ -2,6 +2,7 @@
 import 'package:inventory_control/domain/db/inventory_db.dart';
 import 'package:inventory_control/domain/interfaces/icategory_model.dart';
 import 'package:inventory_control/domain/models/product_category.dart';
+import 'package:sqflite/sql.dart';
 
 class CategoryRepository implements ICategoryModel{
    @override

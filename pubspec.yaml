@@ -24,6 +24,8 @@ dependencies:
   flutter_provider_utilities: ^1.0.6
   input_quantity: ^2.2.0
   persistent_bottom_nav_bar: 
+  another_flushbar: ^1.12.30
+ 
 
 dev_dependencies:
   flutter_test:

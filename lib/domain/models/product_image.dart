@@ -1,9 +1,9 @@
 class ProductImage{
   int? productImageId;
-  int productId;
-  String urlImage;
+  int? productId;
+  String? urlImage;
 
-  ProductImage(this.productImageId,{required this.productId, required this.urlImage});
+  ProductImage({this.productImageId,required this.productId,  this.urlImage});
 
 
   Map<String, dynamic> toMap(){
@@ -14,7 +14,7 @@ class ProductImage{
     };
   }
   static ProductImage fromMap(Map<dynamic,dynamic> map){
-    return ProductImage(map["productImageId"],productId: map["productId"], urlImage: map["urlImage"]);
+    return ProductImage(productImageId: map["productImageId"],productId: map["productId"], urlImage: map["urlImage"]);
   }
 
 }

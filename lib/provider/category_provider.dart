@@ -34,10 +34,11 @@ class CategoryProvider extends ChangeNotifier with MessageNotifierMixin{
     }
   }
 
-  Future<void> delete(ProductCategory T, int index) async {
+  Future<void> delete(ProductCategory T) async {
     try {
       String categoryName = await iCategoryModel.delete(T);
       T.status = 0;
+      int index=categories.indexWhere((element) => element.categoryId==T.categoryId);
       categories[index] = T;
       notifyListeners();
       notifyInfo("Categoría: $categoryName ha sido dado de baja");
@@ -46,9 +47,10 @@ class CategoryProvider extends ChangeNotifier with MessageNotifierMixin{
     }
   }
 
-  Future<void> update(ProductCategory T, int index) async {
+  Future<void> update(ProductCategory T) async {
     try {
       String categoryName = await iCategoryModel.update(T);
+       int index=categories.indexWhere((element) => element.categoryId==T.categoryId);
       categories[index] = T;
       notifyListeners();
       notifyInfo("Categoría: $categoryName ha sido actualizado");

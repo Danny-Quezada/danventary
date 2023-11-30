@@ -28,6 +28,7 @@ class PrincipalPage extends StatelessWidget {
           controller: _controller,
           screens: pages,
           navBarHeight: 90,
+        
           items: [
             PersistentBottomNavBarItem(
               icon: const Icon(CupertinoIcons.chart_bar_square),
