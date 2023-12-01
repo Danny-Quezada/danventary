@@ -7,22 +7,22 @@ import 'package:inventory_control/ui/utils/validator_textfield.dart';
 import 'package:inventory_control/ui/widgets/button_widget.dart';
 import 'package:inventory_control/ui/widgets/card_widget.dart';
 import 'package:inventory_control/ui/widgets/custom_form_field.dart';
+import 'package:inventory_control/ui/widgets/empty_model_widget.dart';
 import 'package:inventory_control/ui/widgets/search_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
-  TextEditingController categoryController = TextEditingController();
-    ProductCategory? productCategory;
+
+TextEditingController categoryController = TextEditingController();
+ProductCategory? productCategory;
+ScrollController listViewController = ScrollController();
 
 class CategoryPage extends StatelessWidget {
-
-
   TextEditingController searchController = TextEditingController();
   CategoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final categoryProvider = Provider.of<CategoryProvider>(context);
-   
+    
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -48,62 +48,68 @@ class CategoryPage extends StatelessWidget {
           backgroundColor: Style.categoryColor,
           child: const Icon(CupertinoIcons.add),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: FutureBuilder(
-            future: categoryProvider.read(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                if (snapshot.hasData) {
-                  List<ProductCategory> productsCategories = snapshot.data!;
-                  if (productsCategories.isEmpty) {
-                    return const Center(
-                      child: EmptyProductWidget(),
-                    );
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: productsCategories.length,
-                    itemBuilder: (context, index) {
-                      CardWidget cardWidget = createProductWidget(
-                          context, productsCategories[index]);
-                      return cardWidget;
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Container(
-                    color: Colors.black,
-                    width: 10,
-                    height: 20,
-                  );
-                }
-              }
-              return Container();
-            },
-          ),
-        ),
+        body: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: CategoriesList()),
       ),
+    );
+  }
+}
+
+class CategoriesList extends StatelessWidget {
+
+  const CategoriesList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+      final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+        categoryProvider.read();
+    return Consumer<CategoryProvider>(
+      builder: (context, value, child) {
+        if (value.categories == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          if (value.categories!.isEmpty) {
+            return  Center(
+              child: EmptyModelWidget(model: "Categorías")
+            );
+          }
+          List<ProductCategory> productsCategories = value.categories!;
+      
+          return Expanded(
+            child: ListView.builder(
+              itemCount: productsCategories.length,
+              itemBuilder: (context, index) {
+                CardWidget cardWidget = createProductWidget(
+                    context,
+                    productsCategories[
+                        (productsCategories.length - 1) - index]);
+                return cardWidget;
+              },
+            ),
+          );
+        }
+      },
     );
   }
 
   CardWidget createProductWidget(
       BuildContext context, ProductCategory productCategoryIndex) {
     CardWidget cardWidget = CardWidget(
-        function: () async{
-          productCategory=productCategoryIndex;
-          categoryController.text=productCategory!.categoryName;
-           await showDialog(
-              context: context,
-              builder: (context) => AlertDialog.adaptive(
-                content: CategoryForm(),
-              ),
-            );
-            categoryController.text = "";
-            productCategory=null;
+        function: () async {
+          productCategory = productCategoryIndex;
+          categoryController.text = productCategory!.categoryName;
+          await showDialog(
+            context: context,
+            builder: (context) => AlertDialog.adaptive(
+              content: CategoryForm(),
+            ),
+          );
+          categoryController.text = "";
+          productCategory = null;
         },
         title: productCategoryIndex.categoryName);
 
@@ -112,14 +118,13 @@ class CategoryPage extends StatelessWidget {
 }
 
 class CategoryForm extends StatelessWidget {
-   CategoryForm({
-    super.key,
-  }) ;
+  CategoryForm();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final categoryProvider=Provider.of<CategoryProvider>(context,listen: false);
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
     return Form(
       key: _formKey,
       child: Column(
@@ -141,48 +146,19 @@ class CategoryForm extends StatelessWidget {
               function: () async {
                 final FormState form = _formKey.currentState!;
                 if (form.validate()) {
-                  if(productCategory!=null){
-                    productCategory!.categoryName =categoryController.text;
+                  if (productCategory != null) {
+                    productCategory!.categoryName = categoryController.text;
                     categoryProvider.update(productCategory!);
-                   
-
+                  } else {
+                    categoryProvider.createCategory(
+                        ProductCategory(categoryName: categoryController.text));
                   }
-                  else{
-                  categoryProvider.createCategory(ProductCategory(
-                      categoryName: categoryController.text));
-                  }
-                   Navigator.pop(context);
+                  Navigator.pop(context);
                 }
               },
               fontSize: 15)
         ],
       ),
-    );
-  }
-}
-
-class EmptyProductWidget extends StatelessWidget {
-  const EmptyProductWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          "assets/images/sadBoy.png",
-          width: size.width * .64,
-          height: size.height * .3,
-        ),
-        SizedBox(
-            child: Text(
-          "No hay productos por el momento, agrega productos.",
-          style: Style.h2RedStyle,
-        ))
-      ],
     );
   }
 }

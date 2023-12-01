@@ -12,29 +12,47 @@ import 'package:inventory_control/ui/widgets/button_widget.dart';
 import 'package:inventory_control/ui/widgets/custom_form_field.dart';
 import 'package:provider/provider.dart';
 
-class CreateProductPage extends StatelessWidget {
-  double price = 1;
-  int quantity = 1;
-  double salePrice = 1;
+class CreateProductPage extends StatefulWidget {
   Product? product;
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-
-  FocusNode nameFocus = FocusNode();
-  FocusNode descriptionFocus = FocusNode();
 
   CreateProductPage({this.product});
 
   @override
+  State<CreateProductPage> createState() => _CreateProductPageState();
+}
+
+class _CreateProductPageState extends State<CreateProductPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+      fillControllers();
+  }
+  double price = 1;
+
+  int quantity = 1;
+
+  double salePrice = 1;
+
+  TextEditingController nameController = TextEditingController();
+
+  TextEditingController descriptionController = TextEditingController();
+
+  FocusNode nameFocus = FocusNode();
+
+  FocusNode descriptionFocus = FocusNode();
+
+  @override
   Widget build(BuildContext context) {
     final productProvider=Provider.of<ProductProvider>(context,listen: false);
-    fillControllers();
+  
     final size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        title: Text(product == null ? "Crear producto" : "Actualizar producto"),
+        title: Text(widget.product == null ? "Crear producto" : "Actualizar producto"),
       ),
       body: SingleChildScrollView(
         padding:
@@ -77,7 +95,7 @@ class CreateProductPage extends StatelessWidget {
               height: 10,
             ),
             InputQty.double(
-              initVal: product?.price ?? 1,
+              initVal: widget.product?.price ?? 1,
               minVal: 1,
               decoration:
                   const QtyDecorationProps(width: 20, border: InputBorder.none),
@@ -96,7 +114,7 @@ class CreateProductPage extends StatelessWidget {
               height: 10,
             ),
             InputQty.double(
-              initVal: product?.price ?? 1,
+              initVal: widget.product?.price ?? 1,
               minVal: 1,
               decoration:
                   const QtyDecorationProps(width: 20, border: InputBorder.none),
@@ -116,7 +134,7 @@ class CreateProductPage extends StatelessWidget {
             ),
             InputQty.int(
             
-              initVal: product?.price ?? 1,
+              initVal: widget.product?.price ?? 1,
               minVal: 1,
               decoration:
                   const QtyDecorationProps(width: 20, border: InputBorder.none),
@@ -141,9 +159,10 @@ class CreateProductPage extends StatelessWidget {
       ),
     ));
   }
+
    fillControllers() {
-    descriptionController.text = product?.description ?? "";
-    nameController.text = product?.productName ?? "";
+    descriptionController.text = widget.product?.description ?? "";
+    nameController.text = widget.product?.productName ?? "";
   
 
   }
