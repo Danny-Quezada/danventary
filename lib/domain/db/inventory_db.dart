@@ -17,15 +17,15 @@ class InventoryDB {
 
   Future<Database> _init() async {
     return await openDatabase(
-      version: 1,
+      version: 3,
       join(await getDatabasesPath(), "inventory_database.db"),
       onCreate: (db, version) {
         db.execute(
             "CREATE TABLE Category(categoryId INTEGER PRIMARY KEY, categoryName TEXT, status INTEGER)");
         db.execute(
-            "CREATE TABLE Product(productId INTEGER PRIMARY KEY, quantity INTEGER,productName TEXT, status INTEGER,description TEXT, price REAL, salePrice REAL, categoryId INTEGER, FOREIGN KEY(categoryId) REFERENCES Category(idCategory))");
+            "CREATE TABLE Product(productId INTEGER PRIMARY KEY, quantity INTEGER,productName TEXT, status INTEGER,description TEXT, price REAL, salePrice REAL, categoryId INTEGER, FOREIGN KEY(categoryId) REFERENCES Category(categoryId))");
         db.execute(
-            "Create TABLE ProductImage(productImageId INTEGER PRIMARY KEY,productId INTEGER, urlImage TEXT, FOREIGN KEY(productId) REFERENCES Product(idProduct))");
+            "Create TABLE ProductImage(productImageId INTEGER PRIMARY KEY, urlImage TEXT, productId INTEGER,FOREIGN KEY(productId) REFERENCES Product(productId))");
       },
     );
   }

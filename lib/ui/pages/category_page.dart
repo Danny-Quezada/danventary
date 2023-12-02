@@ -79,17 +79,15 @@ class CategoriesList extends StatelessWidget {
           }
           List<ProductCategory> productsCategories = value.categories!;
       
-          return Expanded(
-            child: ListView.builder(
-              itemCount: productsCategories.length,
-              itemBuilder: (context, index) {
-                CardWidget cardWidget = createProductWidget(
-                    context,
-                    productsCategories[
-                        (productsCategories.length - 1) - index]);
-                return cardWidget;
-              },
-            ),
+          return ListView.builder(
+            itemCount: productsCategories.length,
+            itemBuilder: (context, index) {
+              CardWidget cardWidget = createProductWidget(
+                  context,
+                  productsCategories[
+                      (productsCategories.length - 1) - index]);
+              return cardWidget;
+            },
           );
         }
       },

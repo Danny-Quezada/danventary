@@ -11,7 +11,13 @@ class ProductProvider extends ChangeNotifier with MessageNotifierMixin {
   List<String> imagesProducts = [];
   List<Product>? products;
   IProductModel iProductModel;
+  ProductCategory? productCategory;
 
+
+  changeProductCategory(ProductCategory category){
+    productCategory=category;
+    notifyListeners();
+  }
   ProductProvider({required this.iProductModel});
 
   changeList(List<String> images) async {

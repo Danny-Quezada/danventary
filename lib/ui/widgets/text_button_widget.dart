@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_control/ui/styles/styles.dart';
 
 class TextButtonWidget extends StatelessWidget {
   String text;
@@ -16,6 +17,9 @@ class TextButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      style: TextButton.styleFrom(
+        foregroundColor: color
+      ),
         onPressed: function,
         child: Text(
           text,

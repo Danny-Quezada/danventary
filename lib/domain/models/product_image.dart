@@ -8,7 +8,7 @@ class ProductImage{
 
   Map<String, dynamic> toMap(){
     return {
-      "productImageId": productImageId ?? 0,
+     
       "productId": productId,
       "urlImage": urlImage
     };
@@ -16,5 +16,11 @@ class ProductImage{
   static ProductImage fromMap(Map<dynamic,dynamic> map){
     return ProductImage(productImageId: map["productImageId"],productId: map["productId"], urlImage: map["urlImage"]);
   }
-
+  static List<ProductImage> fromListString(List<String> imagesList){
+    List<ProductImage> images=[];
+    imagesList.forEach((element) { 
+      images.add(ProductImage(productId: 0,urlImage: element));
+    });
+    return images;
+  }
 }

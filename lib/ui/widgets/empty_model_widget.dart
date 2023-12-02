@@ -18,7 +18,7 @@ class EmptyModelWidget extends StatelessWidget {
         ),
         SizedBox(
             child: Text(
-          "No hay productos por el momento, agrega $model",
+          "No hay $model por el momento, agrega $model",
           style: Style.h2RedStyle,
         ))
       ],

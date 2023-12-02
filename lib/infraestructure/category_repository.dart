@@ -14,9 +14,8 @@ class CategoryRepository implements ICategoryModel{
     int categoryId = 0;
 
     try {
-      db.transaction((txn) async {
+      await db.transaction((txn) async {
         categoryId = await txn.insert("Category", t.toMap());
-       
       });
       return categoryId;
     } catch (e) {
@@ -28,7 +27,7 @@ class CategoryRepository implements ICategoryModel{
   Future<String> delete(ProductCategory t) async {
     var db = await InventoryDB.instace.database;
     try {
-      db.transaction((txn) async {
+      await db.transaction((txn) async {
         t.status = 0;
         await txn.update("Category", t.toMap());
       });
@@ -60,7 +59,7 @@ class CategoryRepository implements ICategoryModel{
   Future<String> update(ProductCategory t) async {
     var db = await InventoryDB.instace.database;
     try {
-      db.transaction((txn) async {
+      await db.transaction((txn) async {
           await txn.update("Category", t.toMap(),
             where: "CategoryId = ?", whereArgs: [t.categoryId]);
      

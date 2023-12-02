@@ -16,7 +16,7 @@ class CustomFormField extends StatefulWidget {
   bool obscureText;
   bool? border;
   CustomFormField(
-      {this.textInput = TextInputType.emailAddress,
+      {this.textInput = TextInputType.name,
       required this.textEditingController,
       required this.validator,
       required this.nextFocusNode,
@@ -44,9 +44,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
       maxLines: widget.border! ? 1: 10,
       keyboardType: widget.textInput,
       decoration: InputDecoration(
-        border: widget.border == false ? InputBorder.none : UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(12)
-        ),
+        
         hintStyle: Style.textFormStyle,
         labelStyle: Style.textFormStyle,
         hintText: widget.hintText,

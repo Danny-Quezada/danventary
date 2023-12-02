@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:inventory_control/domain/models/product_category.dart';
 
 import 'product_image.dart';
@@ -42,6 +43,7 @@ class Product {
         description: objectMap["description"],
         price: objectMap["price"],
         salePrice: objectMap["price"],
+        category: ProductCategory(categoryName: objectMap["categoryName"],categoryId: objectMap["categoryId"]),
         quantity: objectMap["quantity"]);
   }
 }

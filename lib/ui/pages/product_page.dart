@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_control/domain/models/product.dart';
-import 'package:inventory_control/domain/models/product_category.dart';
-import 'package:inventory_control/provider/category_provider.dart';
+
 import 'package:inventory_control/provider/product_provider.dart';
 import 'package:inventory_control/ui/pages/category_page.dart';
 import 'package:inventory_control/ui/pages/create_product_page.dart';
@@ -19,7 +18,9 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productProvider = Provider.of<ProductProvider>(context);
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -58,9 +59,11 @@ class ProductPage extends StatelessWidget {
         child: const Icon(CupertinoIcons.add),
       ),
       body: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10), child: ProductList()),
+          padding: EdgeInsets.symmetric(horizontal: 2), child: ProductList()),
     );
   }
+
+
 }
 
 class ProductList extends StatelessWidget {
@@ -68,9 +71,9 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productProvider =
-        Provider.of<ProductProvider>(context, listen: false);
-        productProvider.read();
+    final productProvider = Provider.of<ProductProvider>(context);
+    productProvider.read();
+
     return Consumer<ProductProvider>(
       builder: (context, value, child) {
         if (value.products == null) {
@@ -82,16 +85,13 @@ class ProductList extends StatelessWidget {
             return Center(child: EmptyModelWidget(model: "productos."));
           }
           List<Product> products = value.products!;
-
-          return Expanded(
-            child: ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                CardWidget cardWidget = createProductWidget(
-                    context, products[(products.length - 1) - index]);
-                return cardWidget;
-              },
-            ),
+          return ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              CardWidget cardWidget = createProductWidget(
+                  context, products[(products.length - 1) - index]);
+              return cardWidget;
+            },
           );
         }
       },
@@ -107,7 +107,7 @@ class ProductList extends StatelessWidget {
         function: () {
           PersistentNavBarNavigator.pushNewScreen(
             context,
-            screen: CreateProductPage(product: product),
+            screen: CreateProductPage(product: product, images: images),
             withNavBar: false,
             pageTransitionAnimation: PageTransitionAnimation.fade,
           );
@@ -118,6 +118,7 @@ class ProductList extends StatelessWidget {
     cardWidget.image = product.productImages!.isEmpty
         ? null
         : product.productImages![0].urlImage;
+        cardWidget.category=product.category!.categoryName;
     return cardWidget;
   }
 }
