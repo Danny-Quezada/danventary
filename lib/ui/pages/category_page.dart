@@ -22,12 +22,15 @@ class CategoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: searchBar(
-              function: (value) {},
+              function: (value) {
+                categoryProvider.changeFind(value);
+              },
               controller: searchController,
               height: 35,
               padding: 0,
@@ -57,14 +60,13 @@ class CategoryPage extends StatelessWidget {
 }
 
 class CategoriesList extends StatelessWidget {
-
   const CategoriesList({super.key});
 
   @override
   Widget build(BuildContext context) {
-      final categoryProvider =
+    final categoryProvider =
         Provider.of<CategoryProvider>(context, listen: false);
-        categoryProvider.read();
+    categoryProvider.read();
     return Consumer<CategoryProvider>(
       builder: (context, value, child) {
         if (value.categories == null) {
@@ -73,19 +75,18 @@ class CategoriesList extends StatelessWidget {
           );
         } else {
           if (value.categories!.isEmpty) {
-            return  Center(
-              child: EmptyModelWidget(model: "Categorías")
-            );
+            return Center(child: EmptyModelWidget(model: "Categorías"));
           }
-          List<ProductCategory> productsCategories = value.categories!;
-      
+          List<ProductCategory> productsCategories = value.categories!
+              .where((element) =>
+                  element.categoryName.toLowerCase().contains(value.findName))
+              .toList();
+
           return ListView.builder(
             itemCount: productsCategories.length,
             itemBuilder: (context, index) {
-              CardWidget cardWidget = createProductWidget(
-                  context,
-                  productsCategories[
-                      (productsCategories.length - 1) - index]);
+              CardWidget cardWidget = createProductWidget(context,
+                  productsCategories[(productsCategories.length - 1) - index]);
               return cardWidget;
             },
           );

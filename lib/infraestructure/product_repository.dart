@@ -20,7 +20,7 @@ class ProductRepository implements IProductModel {
           }
         }
       });
-      await db.close();
+     
       return productId;
     } catch (e) {
       throw Exception(e);

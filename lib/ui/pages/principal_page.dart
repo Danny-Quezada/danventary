@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:inventory_control/ui/pages/dashboard_page.dart';
 import 'package:inventory_control/ui/pages/product_page.dart';
 import 'package:inventory_control/ui/styles/styles.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -9,7 +10,7 @@ class PrincipalPage extends StatelessWidget {
       PersistentTabController(initialIndex: 1);
 
   List<Widget> pages = [
-    Container(),
+   DashboardPage(),
     ProductPage(),
     Container(),
     Container()

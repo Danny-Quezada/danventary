@@ -6,7 +6,7 @@ import 'package:inventory_control/domain/models/product_category.dart';
 class CategoryProvider extends ChangeNotifier with MessageNotifierMixin{
   List<ProductCategory>? categories;
   ICategoryModel iCategoryModel;
-
+  String findName="";
   CategoryProvider({required this.iCategoryModel});
    
 
@@ -20,6 +20,10 @@ class CategoryProvider extends ChangeNotifier with MessageNotifierMixin{
     } catch (e) {
       notifyError(e);
     }
+  }
+  changeFind(String name){
+    findName=name;
+    notifyListeners();
   }
 
   Future<List<ProductCategory>?> read() async {

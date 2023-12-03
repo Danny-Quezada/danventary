@@ -53,7 +53,7 @@ class CardWidget extends StatelessWidget {
                       text: TextSpan(children: [
                         TextSpan(
                             text: 'Categoría: ', style: Style.h3StyleBoldBlue),
-                        TextSpan(text: '$category', style: Style.h3Style),
+                        TextSpan(text: '$category', style: Style.h3StyleBold),
                       ]),
                     )
                   : const SizedBox()

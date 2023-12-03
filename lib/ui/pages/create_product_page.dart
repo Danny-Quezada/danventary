@@ -1,14 +1,14 @@
 import 'dart:io';
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_provider_utilities/flutter_provider_utilities.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:input_quantity/input_quantity.dart';
+import 'package:inventory_control/domain/models/money_flow.dart';
 import 'package:inventory_control/domain/models/product.dart';
 import 'package:inventory_control/domain/models/product_category.dart';
 import 'package:inventory_control/domain/models/product_image.dart';
 import 'package:inventory_control/provider/category_provider.dart';
+import 'package:inventory_control/provider/money_flow_provider.dart';
 import 'package:inventory_control/provider/product_provider.dart';
 import 'package:inventory_control/ui/styles/styles.dart';
 import 'package:inventory_control/ui/utils/validator_textfield.dart';
@@ -33,227 +33,233 @@ class _CreateProductPageState extends State<CreateProductPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fillControllers();
+    fillControllers(context);
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   double price = 1;
-
   int quantity = 1;
-
   double salePrice = 1;
-
   TextEditingController nameController = TextEditingController();
-
   TextEditingController descriptionController = TextEditingController();
-
   FocusNode nameFocus = FocusNode();
-
   FocusNode descriptionFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    final moneyFlowProvider =
+        Provider.of<MoneyFlowProvider>(context, listen: false);
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);
-    productProvider.imagesProducts=widget.images ?? [];
-    productProvider.productCategory=widget.product?.category;
     final size = MediaQuery.of(context).size;
-
     return SafeArea(
-        child: MessageListener<ProductProvider>(
-      showError: (e) {
-        flushbarWidget(
-            context: context, title: "Error:", message: e, error: true);
-      },
-      showInfo: (e) {
-        flushbarWidget(context: context, title: "Exito:", message: e);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.product == null
-              ? "Crear producto"
-              : "Actualizar producto"),
-        ),
-        body: SingleChildScrollView(
-          padding:
-              const EdgeInsets.only(top: 25, left: 10, right: 10, bottom: 10),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const ProductImageWidget(),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomFormField(
-                    textEditingController: nameController,
-                    validator: ValidatorTextField.userNameValidator,
-                    nextFocusNode: descriptionFocus,
-                    focusNode: nameFocus,
-                    hintText: "Nombre del producto",
-                    labelText: "Nombre",
-                    obscureText: false),
-                const SizedBox(
-                  height: 32,
-                ),
-                CustomFormField(
+        child: Scaffold(
+      appBar: AppBar(
+        title: Text(
+            widget.product == null ? "Crear producto" : "Actualizar producto"),
+      ),
+      body: SingleChildScrollView(
+        padding:
+            const EdgeInsets.only(top: 25, left: 10, right: 10, bottom: 10),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const ProductImageWidget(),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomFormField(
+                  textEditingController: nameController,
+                  validator: ValidatorTextField.userNameValidator,
+                  nextFocusNode: descriptionFocus,
+                  focusNode: nameFocus,
+                  hintText: "Nombre del producto",
+                  labelText: "Nombre",
+                  obscureText: false),
+              const SizedBox(
+                height: 32,
+              ),
+              CustomFormField(
                   textInput: TextInputType.multiline,
-                    textEditingController: descriptionController,
-                    validator: ValidatorTextField.genericStringValidator,
-                    nextFocusNode: null,
-                    focusNode: descriptionFocus,
-                    hintText: "Descripción del producto",
-                    labelText: "Descripción del producto",
-                    obscureText: false),
-                const SizedBox(
-                  height: 26,
-                ),
-                Text(
-                  "Precio de compra: ",
-                  style: Style.textInput,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                InputQty.double(
-                  initVal: widget.product?.price ?? 1,
-                  minVal: 1,
-                  decoration: const QtyDecorationProps(
-                      width: 20, border: InputBorder.none),
-                  onQtyChanged: (val) {
-                    price = val;
-                  },
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  "Precio de venta: ",
-                  style: Style.textInput,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                InputQty.double(
-                  initVal: widget.product?.salePrice ?? 1,
-                  minVal: 1,
-                  decoration: const QtyDecorationProps(
-                      width: 20, border: InputBorder.none),
-                  onQtyChanged: (val) {
-                    salePrice = val;
-                  },
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  "Cantidad: ",
-                  style: Style.textInput,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                InputQty.int(
-                  initVal: widget.product?.quantity ?? 1,
-                  minVal: 1,
-                  decoration: const QtyDecorationProps(
-                      width: 20, border: InputBorder.none),
-                  onQtyChanged: (val) {
-                    quantity = val;
-                  },
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Consumer<ProductProvider>(
-                  builder: (context, value, child) {
-                    return TextButtonWidget(
-                        text: value.productCategory == null
-                            ? "Agrega categoría"
-                            : "Categoría: ${value.productCategory!.categoryName}",
-                        color: value.productCategory == null
-                            ? Style.productColor
-                            : Colors.black,
-                        fontSize: 15,
-                        function: () async {
-                          await showDialog(
+                  textEditingController: descriptionController,
+                  validator: ValidatorTextField.genericStringValidator,
+                  nextFocusNode: null,
+                  focusNode: descriptionFocus,
+                  hintText: "Descripción del producto",
+                  labelText: "Descripción del producto",
+                  obscureText: false),
+              const SizedBox(
+                height: 26,
+              ),
+              Text(
+                "Precio de compra: ",
+                style: Style.textInput,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              InputQty.double(
+                initVal: widget.product?.price ?? 1,
+                minVal: 1,
+                decoration: const QtyDecorationProps(
+                    width: 20, border: InputBorder.none),
+                onQtyChanged: (val) {
+                  price = val;
+                },
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Text(
+                "Precio de venta: ",
+                style: Style.textInput,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              InputQty.double(
+                initVal: widget.product?.salePrice ?? 1,
+                minVal: 1,
+                decoration: const QtyDecorationProps(
+                    width: 20, border: InputBorder.none),
+                onQtyChanged: (val) {
+                  salePrice = val;
+                },
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Text(
+                "Cantidad: ",
+                style: Style.textInput,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              InputQty.int(
+                initVal: widget.product?.quantity ?? 1,
+                minVal: 1,
+                decoration: const QtyDecorationProps(
+                    width: 20, border: InputBorder.none),
+                onQtyChanged: (val) {
+                  quantity = val;
+                },
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Consumer<ProductProvider>(
+                builder: (context, value, child) {
+                  return TextButtonWidget(
+                      text: value.productCategory == null
+                          ? "Agrega categoría"
+                          : "Categoría: ${value.productCategory!.categoryName}",
+                      color: value.productCategory == null
+                          ? Style.productColor
+                          : Style.h3StyleBold.color!,
+                      fontSize: 15,
+                      function: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: SizedBox(
+                                width: size.width,
+                                height: size.height * .6,
+                                child: const CategoriesList()),
+                          ),
+                        );
+                      });
+                },
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              ButtonWidget(
+                  text: "Guardar producto",
+                  size: Size(size.width, 50),
+                  color: Style.productColor,
+                  rounded: 12,
+                  function: () async {
+                    final FormState form = _formKey.currentState!;
+                    if (form.validate()) {
+                      if (productProvider.imagesProducts.isEmpty) {
+                        flushbarWidget(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              content: SizedBox(
-                                  width: size.width,
-                                  height: size.height * .6,
-                                  child: const CategoriesList()),
-                            ),
-                          );
-                          
-                        });
-                  },
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                ButtonWidget(
-                    text: "Guardar producto",
-                    size: Size(size.width, 50),
-                    color: Style.productColor,
-                    rounded: 12,
-                    function: () async {
-                      final FormState form = _formKey.currentState!;
-                      if (form.validate()) {
-                        if (productProvider.imagesProducts.isEmpty) {
-                          flushbarWidget(
-                              context: context,
-                              title: "Debes agregar imagen.",
-                              message:
-                                  "Tienes que agregar imagenes al producto.",
-                              error: true);
-                        } else if (productProvider.productCategory == null) {
-                          flushbarWidget(
-                              context: context,
-                              title: "Debes agregar categoría.",
-                              message:
-                                  "Tienes que agregar categoría al producto.",
-                              error: true);
-                        } else {
-                          Product product = Product(
-                              widget.product?.productId ?? 0,
-                              ProductImage.fromListString(
-                                  productProvider.imagesProducts),
-                              productName: nameController.text,
-                              description: descriptionController.text,
-                              price: price,
-                              category: productProvider.productCategory,
-                              salePrice: salePrice,
-                              quantity: quantity);
+                            title: "Debes agregar imagen.",
+                            message: "Tienes que agregar imagenes al producto.",
+                            error: true);
+                      } else if (productProvider.productCategory == null) {
+                        flushbarWidget(
+                            context: context,
+                            title: "Debes agregar categoría.",
+                            message:
+                                "Tienes que agregar categoría al producto.",
+                            error: true);
+                      } else {
+                        Product product = Product(
+                            widget.product?.productId ?? 0,
+                            ProductImage.fromListString(
+                                productProvider.imagesProducts),
+                            productName: nameController.text,
+                            description: descriptionController.text,
+                            price: price,
+                            category: productProvider.productCategory,
+                            salePrice: salePrice,
+                            quantity: quantity);
 
-                          if (widget.product != null) {
-                            await productProvider.update(product);
+                        if (widget.product != null) {
+                          await productProvider.update(product);
+
+                          // Si tengo 30 productos pero ahora salen 40
+                          int difference =
+                              widget.product!.quantity - product.quantity;
+                          int type = 0;
+                          if (difference > 0) {
+                            type = 0;
                           } else {
-                            await productProvider.createProduct(product);
+                            type = 1;
                           }
-                          Navigator.pop(context);
+                          MoneyFlow moneyFlow = MoneyFlow(
+                              amount: product.price,
+                              quantity: difference.abs(),
+                              productId: product.productId!,
+                              flowType: type);
+                          await moneyFlowProvider.create(moneyFlow);
+                        } else {
+                          int productId =
+                              await productProvider.createProduct(product);
+                          MoneyFlow moneyFlow = MoneyFlow(
+                              amount: product.price,
+                              quantity: product.quantity,
+                              productId: product.productId!,
+                              flowType: 0);
+                          await moneyFlowProvider.create(moneyFlow);
                         }
-                      } else {}
-                    },
-                    fontSize: 11)
-              ],
-            ),
+                        Navigator.pop(context);
+                      }
+                    } 
+                  },
+                  fontSize: 11)
+            ],
           ),
         ),
       ),
     ));
   }
 
-  fillControllers() {
+  fillControllers(BuildContext context) {
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
     descriptionController.text = widget.product?.description ?? "";
     nameController.text = widget.product?.productName ?? "";
     price = widget.product?.price ?? 1;
     salePrice = widget.product?.salePrice ?? 1;
     quantity = widget.product?.quantity ?? 1;
-    
+    productProvider.imagesProducts = widget.images ?? [];
+    productProvider.productCategory = widget.product?.category;
   }
 }
 
@@ -367,7 +373,7 @@ class CategoriesList extends StatelessWidget {
                   onTap: () {
                     productProvider.changeProductCategory(productsCategories[
                         (productsCategories.length - 1) - index]);
-                        Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   title: Text(productsCategories[
                           (productsCategories.length - 1) - index]

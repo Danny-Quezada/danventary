@@ -26,7 +26,7 @@ class searchBar extends StatelessWidget {
         height: height, //35
         child:  SearchBar(
           hintText: "Buscar",
-          elevation: MaterialStatePropertyAll<double?>(0),
+          elevation:const MaterialStatePropertyAll<double?>(0),
           leading: Icon(
             Icons.search,
             color: iconColor,

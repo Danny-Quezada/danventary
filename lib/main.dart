@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_control/domain/interfaces/icategory_model.dart';
+import 'package:inventory_control/domain/interfaces/imoney_flow_model.dart';
 import 'package:inventory_control/domain/interfaces/iproduct_model.dart';
 import 'package:inventory_control/infraestructure/category_repository.dart';
+import 'package:inventory_control/infraestructure/money_flow_repository.dart';
 import 'package:inventory_control/infraestructure/product_repository.dart';
 import 'package:inventory_control/provider/category_provider.dart';
+import 'package:inventory_control/provider/money_flow_provider.dart';
 import 'package:inventory_control/provider/product_provider.dart';
 import 'package:inventory_control/ui/pages/principal_page.dart';
 import 'package:inventory_control/ui/pages/product_page.dart';
@@ -27,6 +30,14 @@ void main(List<String> args) {
             iCategoryModel:
                 Provider.of<ICategoryModel>(context, listen: false)),
       ),
+      Provider<IMoneyFlowModel>(
+        create: (_) => MoneyFlowRepository(),
+      ),
+      ChangeNotifierProvider<MoneyFlowProvider>(
+        create: (context) => MoneyFlowProvider(
+            iMoneyFlowModel:
+                Provider.of<IMoneyFlowModel>(context, listen: false)),
+      ),
     ],
     child: MaterialApp(
       initialRoute: "/",
@@ -39,17 +50,16 @@ void main(List<String> args) {
         useMaterial3: true,
       ),
       theme: ThemeData(
-        canvasColor: Colors.white,
-        scaffoldBackgroundColor: Colors.white,
+          canvasColor: Colors.white,
+          scaffoldBackgroundColor: Colors.white,
           floatingActionButtonTheme:
               const FloatingActionButtonThemeData(elevation: 0),
           fontFamily: "Inter",
           appBarTheme: const AppBarTheme(
-            foregroundColor: Colors.black,
-            elevation: 0,
-            centerTitle: true,
-            backgroundColor: Colors.white
-          )),
+              foregroundColor: Colors.black,
+              elevation: 0,
+              centerTitle: true,
+              backgroundColor: Colors.white)),
     ),
   ));
 }
