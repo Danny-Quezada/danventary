@@ -29,7 +29,7 @@ class MoneyFlowRepository implements IMoneyFlowModel {
     var db = await InventoryDB.instace.database;
     try {
       List<Map> result = await db.rawQuery(
-          "Select MoneyFlow.productId, MoneyFlow.flowType, MoneyFlow.amount, MoneyFlow.moneyFlowId,MoneyFlow.quantity, Product.productName from MoneyFlow inner join Product on Product.productId=MoneyFlow.productId");
+          "Select MoneyFlow.productId, MoneyFlow.flowType, MoneyFlow.amount, MoneyFlow.date,MoneyFlow.moneyFlowId,MoneyFlow.quantity, Product.productName from MoneyFlow inner join Product on Product.productId=MoneyFlow.productId");
       result.forEach((element) async {
         MoneyFlow moneyFlow = MoneyFlow.toObject(element);
 

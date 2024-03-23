@@ -5,7 +5,7 @@ class MoneyFlow {
   int quantity;
   int productId;
   String? productName;
-
+  DateTime date;
   MoneyFlow({
     this.productName,
     this.moneyFlowId,
@@ -13,6 +13,7 @@ class MoneyFlow {
     required this.quantity,
     required this.productId,
     required this.flowType,
+    required this.date
   });
 
   Map<String, dynamic> toMap() {
@@ -20,7 +21,8 @@ class MoneyFlow {
       "quantity": quantity,
       "productId": productId,
       "amount": amount,
-      "flowType": flowType
+      "flowType": flowType,
+      "date": date.millisecondsSinceEpoch
     };
   }
 
@@ -31,6 +33,8 @@ class MoneyFlow {
         amount: map["amount"],
         quantity: map["quantity"],
         productId: map["productId"],
-        flowType: map["flowType"]);
+        flowType: map["flowType"],
+        date: DateTime.fromMillisecondsSinceEpoch(map["date"]));
+
   }
 }

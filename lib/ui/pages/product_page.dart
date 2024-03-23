@@ -14,9 +14,23 @@ import 'package:inventory_control/ui/widgets/search_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   ProductPage({super.key});
 
+  @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    productProvider.read();
+  }
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -26,22 +40,7 @@ class ProductPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                PersistentNavBarNavigator.pushNewScreen(
-                  context,
-                  screen: CategoryPage(),
-                  withNavBar: false,
-                  pageTransitionAnimation: PageTransitionAnimation.fade,
-                );
-                productProvider.imagesProducts = [];
-              },
-              icon: Icon(
-                Icons.category_outlined,
-                color: Style.categoryColor,
-              ))
-        ],
+        
         title: searchBar(
             function: (value) {
               productProvider.changeFind(value);
@@ -81,22 +80,8 @@ class ProductPage extends StatelessWidget {
   }
 }
 
-class ProductList extends StatefulWidget {
+class ProductList extends StatelessWidget {
   const ProductList({super.key});
-
-  @override
-  State<ProductList> createState() => _ProductListState();
-}
-
-class _ProductListState extends State<ProductList> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    final productProvider =
-        Provider.of<ProductProvider>(context, listen: false);
-    productProvider.read();
-  }
 
   @override
   Widget build(BuildContext context) {

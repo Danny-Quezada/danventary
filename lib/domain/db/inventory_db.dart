@@ -17,7 +17,7 @@ class InventoryDB {
 
   Future<Database> _init() async {
     return await openDatabase(
-      version: 4,
+      version: 5,
       join(await getDatabasesPath(), "inventory_database.db"),
       onCreate: (db, version) {
         db.execute(
@@ -27,7 +27,7 @@ class InventoryDB {
         db.execute(
             "Create TABLE ProductImage(productImageId INTEGER PRIMARY KEY, urlImage TEXT, productId INTEGER,FOREIGN KEY(productId) REFERENCES Product(productId))");
         db.execute(
-            "CREATE TABLE MoneyFlow(moneyFlowId INTEGER PRIMARY KEY, flowType INTEGER,amount REAL, quantity INTEGER, productId INTEGER, FOREIGN KEY(productId) REFERENCES Product(productId))");
+            "CREATE TABLE MoneyFlow(moneyFlowId INTEGER PRIMARY KEY, flowType INTEGER,amount REAL, quantity INTEGER, date INTEGER,productId INTEGER, FOREIGN KEY(productId) REFERENCES Product(productId))");
       },
     );
   }

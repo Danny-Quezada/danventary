@@ -17,6 +17,7 @@ import 'package:inventory_control/ui/widgets/custom_form_field.dart';
 import 'package:inventory_control/ui/widgets/empty_model_widget.dart';
 import 'package:inventory_control/ui/widgets/flushbar_widget.dart';
 import 'package:inventory_control/ui/widgets/text_button_widget.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
 class CreateProductPage extends StatefulWidget {
@@ -218,14 +219,16 @@ class _CreateProductPageState extends State<CreateProductPage> {
                               widget.product!.quantity - product.quantity;
                           int type = 0;
                           if (difference > 0) {
-                            type = 0;
-                          } else {
                             type = 1;
+                          } else {
+                            type = 0;
                           }
                           MoneyFlow moneyFlow = MoneyFlow(
-                              amount: product.price,
+                              amount:
+                                  type == 0 ? product.price : product.salePrice,
                               quantity: difference.abs(),
                               productId: product.productId!,
+                              date: DateTime.now(),
                               flowType: type);
                           await moneyFlowProvider.create(moneyFlow);
                         } else {
@@ -234,13 +237,17 @@ class _CreateProductPageState extends State<CreateProductPage> {
                           MoneyFlow moneyFlow = MoneyFlow(
                               amount: product.price,
                               quantity: product.quantity,
-                              productId: product.productId!,
+                              productId: productId,
+                              date: DateTime.now(),
                               flowType: 0);
                           await moneyFlowProvider.create(moneyFlow);
                         }
-                        Navigator.pop(context);
+
+                        Future.delayed(Duration.zero, () {
+                          Navigator.of(context).pop();
+                        });
                       }
-                    } 
+                    }
                   },
                   fontSize: 11)
             ],

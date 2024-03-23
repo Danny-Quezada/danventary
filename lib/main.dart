@@ -46,15 +46,16 @@ void main(List<String> args) {
         "ProductPage": (context) => ProductPage()
       },
       themeMode: ThemeMode.system,
-      darkTheme: ThemeData.dark(
-        useMaterial3: true,
-      ),
+      darkTheme: ThemeData(useMaterial3: true,brightness: Brightness.dark,fontFamily: "Inter",),
       theme: ThemeData(
+          cardTheme: const CardTheme(elevation: 2),
           canvasColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,
           floatingActionButtonTheme:
               const FloatingActionButtonThemeData(elevation: 0),
           fontFamily: "Inter",
+         shadowColor: Colors.grey.shade300,
+          
           appBarTheme: const AppBarTheme(
               foregroundColor: Colors.black,
               elevation: 0,

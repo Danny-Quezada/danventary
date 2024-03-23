@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Style{
-  static TextStyle h1Style=const TextStyle(fontWeight: FontWeight.w900,fontSize: 15);
+  static TextStyle h1Style=const TextStyle(fontWeight: FontWeight.bold,fontSize: 16);
+  static TextStyle titleStyle=const TextStyle(fontWeight: FontWeight.bold,fontSize: 18);
+  static TextStyle h1GreyStyle=TextStyle(fontWeight: FontWeight.bold, fontSize: 15,color: Colors.grey.shade500);
   static TextStyle h2Style=const TextStyle(fontSize: 13);
   static TextStyle h2RedStyle=const TextStyle(fontSize: 13,color: Colors.red,fontWeight: FontWeight.w600);
   static TextStyle textFormStyle=TextStyle(color: Colors.grey.shade300);
